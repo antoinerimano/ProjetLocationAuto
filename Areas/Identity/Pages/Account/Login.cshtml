@@ -1,0 +1,109 @@
+﻿@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "~/Areas/Identity/Pages/_AuthentificationLayout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <!-- Formulaire de connexion -->
+        <div class="col-md-6">
+            <form id="account" method="post">
+                <h2>Utilisez votre compte existant pour vous connecter</h2>
+                <hr />
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="nom@example.com" />
+                            <label asp-for="Input.Email" class="form-label">Email</label>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-floating mb-3">
+                            <input asp-for="Input.Password" id="password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                            <label asp-for="Input.Password">Mot de Passe</label>
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" onclick="togglePasswordVisibility('password')">
+                                <label class="form-check-label" for="showPassword">
+                                    Afficher le mot de passe
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" asp-for="Input.RememberMe" />
+                            <label class="form-check-label" asp-for="Input.RememberMe">Se souvenir de moi</label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Se connecter</button>
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <p>
+                        <a id="forgot-password" asp-page="./ForgotPassword">Mot de passe oublié</a>
+                    </p>
+                    <p>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Envoyez une confirmation d'email</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Authentification externe (Google et Facebook) -->
+        <div class="col-md-6">
+            <section>
+                <h3>Utiliser un autre service pour se connecter.</h3>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                            <p>
+                                Aucun service d'authentification externe n'est configuré. Voir ceci <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                    article
+                                    sur la configuration de cette application ASP.NET pour prendre en charge la connexion via des services externes
+                                </a>.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins!)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        // Fonction pour basculer entre le type password et text
+        function togglePasswordVisibility(inputId) {
+            const passwordField = document.getElementById(inputId);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+            } else {
+                passwordField.type = "password";
+            }
+        }
+    </script>
+}
+

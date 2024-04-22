@@ -1,0 +1,62 @@
+﻿@using System.Security.Claims
+@model List<Projet_Final.Areas.Identity.Data.ApplicationUtilisateur>
+
+<h1>Liste des Utilisateurs</h1>
+
+<form method="get">
+    <p>
+        <input type="text" name="rechercheUtilisateur" placeholder="Rechercher par nom, prénom, adresse courriel, etc." />
+        <button type="submit">Rechercher</button>
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Prenom</th>
+            <th>Nom de famille</th>
+            <th>Nom d'utilisateur</th>
+            <th>Adresse courriel</th>
+            <th>Numéro de téléphone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var utilisateur in Model)
+        {
+            <tr>
+                <td>@utilisateur.Id</td>
+                <td>@utilisateur.FirstName</td>
+                <td>@utilisateur.LastName</td>
+                <td>@utilisateur.UserName</td>
+                <td>@utilisateur.Email</td>
+                <td>@utilisateur.PhoneNumber</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@utilisateur.Id">Modifier</a>
+                    <a asp-action="Details" asp-route-id="@utilisateur.Id">Détails</a>
+                    <!-- Vérification pour ne pas afficher les boutons "Effacer" et "Verrouiller/Déverrouiller" si l'utilisateur est le compte Admin -->
+                    @if (!User.IsInRole("Admin") || User.FindFirstValue(ClaimTypes.NameIdentifier) != utilisateur.Id)
+                    {
+                        <form asp-action="Delete" asp-route-id="@utilisateur.Id" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?');">
+                            <button type="submit">Effacer</button>
+                        </form>
+
+                        @if (utilisateur.LockoutEnd == null)
+                        {
+                            <form asp-action="Verrouiller" asp-route-id="@utilisateur.Id" method="get">
+                                <button type="submit">Verrouiller</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="Deverrouiller" asp-route-id="@utilisateur.Id" method="post">
+                                <button type="submit">Déverrouiller</button>
+                            </form>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

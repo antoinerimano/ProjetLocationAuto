@@ -1,0 +1,65 @@
+﻿@{
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mt-4">
+                <div class="card p-3">
+                    <p class="mb-0 fw-bold h4">Méthodes de Paiements</p>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card p-3">
+                    <div class="card-body border p-0">
+                        <p>
+                            <a class="btn btn-primary w-100 h-100 d-flex align-items-center justify-content-between"
+                               data-bs-toggle="collapse" href="#paypalCollapse" role="button" aria-expanded="true"
+                               aria-controls="paypalCollapse">
+                                <span class="fw-bold">PayPal</span>
+                                <span class="fab fa-cc-paypal"></span>
+                            </a>
+                        </p>
+                        <div class="collapse p-3 pt-0" id="paypalCollapse">
+                            <!-- Contenu spécifique à PayPal -->
+                        </div>
+                    </div>
+                    <div class="card-body border p-0">
+                        <p>
+                            <a class="btn btn-primary p-2 w-100 h-100 d-flex align-items-center justify-content-between"
+                               data-bs-toggle="collapse" href="#creditCardCollapse" role="button" aria-expanded="true"
+                               aria-controls="creditCardCollapse">
+                                <span class="fw-bold">Carte de Crédit</span>
+                                <span class="">
+                                    <span class="fab fa-cc-amex"></span>
+                                    <span class="fab fa-cc-mastercard"></span>
+                                    <span class="fab fa-cc-discover"></span>
+                                </span>
+                            </a>
+                        </p>
+                        <div class="collapse show p-3 pt-0" id="creditCardCollapse">
+                            <!-- Contenu spécifique à la Carte de Crédit -->
+                            <div class="row">
+                                <div class="col-lg-5 mb-lg-0 mb-3">
+                                    <!-- ... -->
+                                </div>
+                                <div class="col-lg-7">
+                                    <form action="/votre-endpoint-de-paiement" method="post" class="form">
+                                        <!-- Formulaire de paiement avec Stripe ou tout autre service de paiement -->
+                                        <!-- ... -->
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary w-100">Soumettre</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <!-- Bouton global pour effectuer le paiement -->
+                <div class="btn btn-primary payment">
+                    Faire Paiement
+                </div>
+            </div>
+        </div>
+    </div>
+}

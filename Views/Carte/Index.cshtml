@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte Interactive de Montréal</title>
+
+    <!-- Liens CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-fullscreen/dist/leaflet.control.fullscreen.min.css" />
+
+    <!-- Styles CSS personnalisés -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff; /* Bleu Alice */
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color: #ffffff; /* Blanc */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007bff; /* Bleu brillant */
+            margin-bottom: 20px;
+        }
+
+        #map {
+            height: 500px;
+            border: 1px solid #b0c4de; /* Bleu Clair */
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .legend {
+            background-color: #fff;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+            .legend span {
+                display: inline-block;
+                margin-right: 20px;
+                padding: 5px;
+                border-radius: 5px;
+            }
+
+            .legend .marker1 {
+                background-color: #2ecc71; /* Vert émeraude */
+                color: #fff;
+            }
+
+            .legend .marker2 {
+                background-color: #e74c3c; /* Rouge corail */
+                color: #fff;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2>Carte Interactive (GPS)</h2>
+            </div>
+            <div class="col-12">
+                <div id="map"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 legend">
+                Légende:
+                <span class="marker1">Marqueur 1</span>
+                <span class="marker2">Marqueur 2</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Liens JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-control-fullscreen/dist/Leaflet.Control.FullScreen.js"></script>
+
+    <script>
+        var map = L.map('map').setView([45.5017, -73.5673], 12);
+
+        // Utilisation de tuiles OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Ajout du contrôle de recherche d'itinéraire
+        var control = L.Routing.control({
+            waypoints: [],
+            routeWhileDragging: true
+        }).addTo(map);
+
+        // Ajout du contrôle de recherche géocoder
+        L.Control.geocoder().addTo(map);
+
+        // Ajout du contrôle de plein écran
+        var fullscreenControl = L.control.fullscreen().addTo(map);
+
+        // Ajout du contrôle de couches
+        var baseLayers = {
+            "OpenStreetMap": L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }),
+            "Mapbox Satellite": L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_ACCESS_TOKEN', {
+                attribution: '&copy; Mapbox',
+                maxZoom: 18,
+                id: 'mapbox/satellite-v9',
+                tileSize: 512,
+                zoomOffset: -1
+            })
+        };
+
+        L.control.layers(baseLayers).addTo(map);
+
+        // Ajout de marqueurs personnalisés avec des icônes
+        var markerIcon1 = L.icon({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            tooltipAnchor: [16, -28],
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+            shadowSize: [41, 41]
+        });
+
+        var markerIcon2 = L.icon({
+            iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            tooltipAnchor: [16, -28],
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+            shadowSize: [41, 41]
+        });
+
+        var marker1 = L.marker([45.5, -73.6], { icon: markerIcon1 }).addTo(map).bindPopup('Marqueur 1').openPopup();
+        var marker2 = L.marker([45.52, -73.56], { icon: markerIcon2 }).addTo(map).bindPopup('Marqueur 2').openPopup();
+    </script>
+</body>
+</html>
+
+
+  
